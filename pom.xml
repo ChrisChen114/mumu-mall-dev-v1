@@ -63,6 +63,12 @@
         </dependency>
 
 
+        <!-- 3-6 AOP统一处理web请求日志 -->
+        <!-- 引入AOP组件 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

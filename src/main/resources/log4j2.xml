@@ -9,6 +9,7 @@
         <Console name="Console" target="SYSTEM_OUT">
             <!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- pattern设置的是日志格式 -->
             <PatternLayout pattern="[%d{MM:dd HH:mm:ss.SSS}] [%level] [%logger{36}] - %msg%n"/>
         </Console>
 
@@ -20,10 +21,8 @@
                 <ThresholdFilter level="debug"/>
                 <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
             </Filters>
-
             <!-- 日志格式 -->
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
-
             <!-- 策略 -->
             <Policies>
                 <!-- 每隔一天转存 -->
@@ -41,10 +40,8 @@
                 <ThresholdFilter level="info"/>
                 <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
             </Filters>
-
             <!-- 日志格式 -->
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
-
             <!-- 策略 -->
             <Policies>
                 <!-- 每隔一天转存 -->
@@ -61,10 +58,8 @@
                 <!-- 限制日志级别在error及以上 -->
                 <ThresholdFilter level="error"/>
             </Filters>
-
             <!-- 日志格式 -->
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
-
             <!-- 策略 -->
             <Policies>
                 <!-- 每隔一天转存 -->
@@ -82,6 +77,5 @@
             <AppenderRef ref="info_appender"/>
             <AppenderRef ref="error_appender"/>
         </Root>
-
     </Loggers>
 </Configuration>

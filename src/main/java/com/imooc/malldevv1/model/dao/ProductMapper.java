@@ -3,6 +3,8 @@ package com.imooc.malldevv1.model.dao;
 import com.imooc.malldevv1.model.pojo.Product;
 import org.springframework.stereotype.Repository;
 
+
+//Repository，语义注解，说明当前类用于业务持久层，通常描述对应Dao类
 @Repository  //告诉IDE（此处是IDEA），这是一个资源
 public interface ProductMapper {
     int deleteByPrimaryKey(Integer id);
