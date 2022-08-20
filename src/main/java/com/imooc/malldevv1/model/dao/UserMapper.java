@@ -22,7 +22,7 @@ public interface UserMapper {
 
 
     //dev_v1
-    //
+    //在String userNam前面，不用加@RequestParam注解
     User selectByName( String userName);
 
 

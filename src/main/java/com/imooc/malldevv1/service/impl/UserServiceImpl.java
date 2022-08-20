@@ -5,8 +5,11 @@ import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
 import com.imooc.malldevv1.model.dao.UserMapper;
 import com.imooc.malldevv1.model.pojo.User;
 import com.imooc.malldevv1.service.UserService;
+import com.imooc.malldevv1.util.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.NoSuchAlgorithmException;
 
 /**
  * UserService实现类
@@ -30,7 +33,7 @@ public class UserServiceImpl implements UserService {
     //在Service层中不直接返回success或error，不直接触碰与最终结果有关的东西；Controller层中，直接返回与最终结果有关的success或error
     //因此Service层中，需要用到抛出异常类（自定义异常类）
     @Override
-    public void register(String userName, String password) throws ImoocMallException {
+    public void register(String userName, String password) throws ImoocMallException, NoSuchAlgorithmException {
         //查询用户名是否存在，不允许重名
         User result = userMapper.selectByName(userName);
         if (result != null){
@@ -40,7 +43,8 @@ public class UserServiceImpl implements UserService {
         }
         User user = new User();
         user.setUsername(userName);
-        user.setPassword(password);
+        user.setPassword(MD5Utils.getMd5Str(password) );
+
         //此处不能使用insert插入，因为insert插入语句是插入所有字段，要保证所有字段都存在。
         //而insertSelective，是选择性插入，有值的插入，没有值的字段则用默认值。
         //通常使用insertSelective

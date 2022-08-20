@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  * 用户控制器
  * <p>
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 //@Controller，语义注解，说明当前类是MVC应用中的控制器类
 
-@RestController   //@RestController = @Controller + @ResponseBody
+@RestController   //@RestController = @Controller + @ResponseBody，两者相等
 public class UserController {
 
     @Autowired
@@ -41,8 +43,11 @@ public class UserController {
     //前台：注册新用户
     //Controller层中，返回与最终结果有关的success或error；而Service层中，抛出异常
     //注意：post请求在浏览器中是不方便模拟的，此时可以使用Postman软件进行测试.
+    //单纯的查询，用get；而涉及到插入、更新、删除等操作，要使用post请求
+    //@GetMapping,浏览器可以支持，但不推荐
+    //@RequestMapping是get和post都支持，但不推荐
     @PostMapping("/register")
-    public ApiRestResponse register(@RequestParam("userName") String userName, @RequestParam("password") String password) throws ImoocMallException {
+    public ApiRestResponse register(@RequestParam("userName") String userName, @RequestParam("password") String password) throws ImoocMallException, NoSuchAlgorithmException {
         //下面这三重判断，放在controller层中比较合适；通过三重验证后，可以进入service层，然后进行数据库的操作
         //判断用户名和密码是否为空
         if (StringUtils.isEmpty(userName)) {

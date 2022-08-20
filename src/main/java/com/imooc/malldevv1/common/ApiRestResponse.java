@@ -6,7 +6,7 @@ import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
  * common通用类：
  * API统一返回对象；通用返回对象
  *
- * 2022-08-19创建
+ * 2022-08-19 创建
  * 2022-08-19 更新
  *
  */

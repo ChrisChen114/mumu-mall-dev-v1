@@ -2,7 +2,7 @@ package com.imooc.malldevv1.exception;
 
 /**
  * 异常枚举
- * 2022-08-19创建
+ * 2022-08-19 创建
  * 2022-08-19 编写
  *
  * 起因：在ApiRestResponse类中，失败的常见错误，不想每次都写，
@@ -10,13 +10,16 @@ package com.imooc.malldevv1.exception;
  *
  */
 public enum ImoocMallExceptionEnum {
+    //通过不同的状态码，前端同样可以知晓异常错误类型
+    //10000打头的表示业务异常
     NEED_USER_NAME(10001,"用户名不能为空"),
     NEED_PASSWORD(10002,"密码不能为空"),
     PASSWORD_TOO_SHORT(10003,"密码不能少于8位"),
-    NAME_EXISTED(10004,"用户已存在,不允许重名"),
+    NAME_EXISTED(10004,"不允许重名，注册失败"),
     INSERT_FAILED(10005,"插入失败，请重试"),
 
-    SYSTEM_OUT(20000,"系统错误");
+    //20000打头的，表示系统类型的异常
+    SYSTEM_ERROR(20000,"系统异常");
 
     //异常码
     Integer code;
