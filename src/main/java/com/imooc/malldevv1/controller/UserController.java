@@ -74,7 +74,7 @@ public class UserController {
 
     //前台：登录
     //技术点：登录状态需要保持；
-    //session的实现方案，登录后，会保存用户信息到session
+    //session的实现方案：登录后，会保存用户信息到session
     //之后的访问，会先从session中获取用户信息，然后再执行业务逻辑
     //2022-08-19 创建
     //2022-08-20 编写
@@ -101,7 +101,7 @@ public class UserController {
         user.setPassword("");
         //设置session属性，名称和值（key,value）写入session中
         session.setAttribute(Constant.IMOOC_MALL_DEV_V1_USER, user);
-        //success这里可以返回user信息
+        //success这里可以返回user信息；具体详情得参考生鲜接口文档
         return ApiRestResponse.success(user);
     }
 
