@@ -22,8 +22,16 @@ public interface UserMapper {
 
 
     //dev_v1
-    //在String userNam前面，不用加@RequestParam注解
+    // 2022-08-19 新增；用户模块中注册新用户用到
+    //在String userName前面，不用加@RequestParam注解
+    //对于MyBatis而言，入参只有一个的话，可以不写@RequestParam注解
+    //而如果有多个，则需要使用@RequestParam注解，注解里面与后面的属性名一致
     User selectByName( String userName);
+
+    // 2022-08-20 新增；用户模块中前台用户登录用到
+    //对于MyBatis而言，入参只有一个的话，可以不写@RequestParam注解
+    //而如果有多个，则需要使用@RequestParam注解，注解里面与后面的属性名一致
+    User selectLogin(@RequestParam("userName") String userName,@RequestParam("password") String password);
 
 
 

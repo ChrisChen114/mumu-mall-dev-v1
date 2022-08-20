@@ -18,5 +18,9 @@ public interface UserService {
     void register(String userName, String password) throws ImoocMallException, NoSuchAlgorithmException;
 
 
+    //前台：登录
+    User login(String userName, String password) throws ImoocMallException, NoSuchAlgorithmException;
 
+    //前台：更新个性签名
+    void updateInformation(User user) throws ImoocMallException;
 }

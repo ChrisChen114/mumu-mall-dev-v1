@@ -123,5 +123,17 @@
     where username = #{userName,jdbcType=VARCHAR}
   </select>
 
+  <!-- 2022-08-19 新增；用户模块中注册新用户用到 -->
+  <!-- 考虑入参不止一个，parameterType使用map，使用map代表参数不止一个 -->
+  <!-- <include refid="Base_Column_List" />表示一个对象，即select这样一个对象 -->
+  <select id="selectLogin" parameterType="map"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_user
+    where username = #{userName,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </select>
+
+
+
 
 </mapper>

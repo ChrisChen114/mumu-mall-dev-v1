@@ -17,6 +17,8 @@ public enum ImoocMallExceptionEnum {
     PASSWORD_TOO_SHORT(10003,"密码不能少于8位"),
     NAME_EXISTED(10004,"不允许重名，注册失败"),
     INSERT_FAILED(10005,"插入失败，请重试"),
+    WRONG_PASSWORD(10006,"密码错误，请重试"),
+    UPDATE_FAILED(10007,"更新失败"),
 
     //20000打头的，表示系统类型的异常
     SYSTEM_ERROR(20000,"系统异常");
