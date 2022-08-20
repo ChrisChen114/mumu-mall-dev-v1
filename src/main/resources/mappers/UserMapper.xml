@@ -116,6 +116,7 @@
   </update>
 
   <!-- 2022-08-19 新增；用户模块中注册新用户用到 -->
+  <!-- 入参只有一个String类型，parameterType可以写成String类型的；对于多个的使用map -->
   <select id="selectByName" parameterType="java.lang.String"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

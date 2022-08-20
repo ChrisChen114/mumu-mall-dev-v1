@@ -23,4 +23,6 @@ public interface UserService {
 
     //前台：更新个性签名
     void updateInformation(User user) throws ImoocMallException;
+
+
 }

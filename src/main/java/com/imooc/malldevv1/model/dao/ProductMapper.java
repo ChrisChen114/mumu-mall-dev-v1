@@ -20,7 +20,7 @@ public interface ProductMapper {
     int updateByPrimaryKey(Product record);
 
 
-    //dev_v1
+    //dev_v1 增加
     //
 
 

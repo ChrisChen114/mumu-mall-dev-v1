@@ -68,4 +68,6 @@ public class GlobalExceptionHandler {
         return ApiRestResponse.error(e.getCode(), e.getMessage());
     }
 
+
+
 }

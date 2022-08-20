@@ -21,7 +21,7 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
 
-    //dev_v1
+    //dev_v1 增加
     // 2022-08-19 新增；用户模块中注册新用户用到
     //在String userName前面，不用加@RequestParam注解
     //对于MyBatis而言，入参只有一个的话，可以不写@RequestParam注解

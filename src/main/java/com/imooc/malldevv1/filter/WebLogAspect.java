@@ -86,4 +86,7 @@ public class WebLogAspect {
         //需要将res转成JSON格式的对象，使用ObjectMapper，它是fastjson提供的，把对象转为json的工具
         log.info("RESPONSE : " + new ObjectMapper().writeValueAsString(res));
     }
+
+
+
 }
