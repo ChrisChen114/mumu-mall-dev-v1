@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+//测试用，跑通数据库
 //@Controller，语义注解，说明当前类是MVC应用中的控制器类
 @Controller
 public class TestDB {
