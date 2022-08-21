@@ -112,10 +112,12 @@ public class UserServiceImpl implements UserService {
     }
 
     //前台：更新个性签名
+    //2022-08-20 编写
     @Override
     public void updateInformation(User user) throws ImoocMallException {
         //选择性的更新
         int updateCount = userMapper.updateByPrimaryKeySelective(user);
+        //只更新一条数据，主键是不能重复的；=1是正确的；超过1条，肯定存在错误.
         if (updateCount > 1) {
             //更新失败
             throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
@@ -123,6 +125,38 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    //后台：管理员登录
+    //2022-08-20 编写
+//    @Override
+//    public User adminLogin(String userName, String password) throws ImoocMallException {
+//        //将密码进行MD5加密，然后与数据库里保存的进行比对
+//        String md5Password = null;
+//        try {
+//            md5Password = MD5Utils.getMd5Str(password);
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//        User user = userMapper.selectLogin(userName, md5Password);
+//        if (user == null) {
+//            //用户不存在
+//            throw new ImoocMallException(ImoocMallExceptionEnum.WRONG_PASSWORD);
+//        }
+//        //检查角色role是否等于2
+//        if(!checkAdminRole(user)){
+//            throw new ImoocMallException(ImoocMallExceptionEnum.WRONG_PASSWORD);
+//        }
+//        //能找到管理员，则返回
+//        return user;
+//    }
+
+
+    //后台：管理员登录
+    //2022-08-20 编写
+    @Override
+    public boolean checkAdminRole(User user) {
+        //根据字段角色role，1-普通用户，2-管理员
+        return user.getRole().equals(2);
+    }
 
 
 }

@@ -25,4 +25,11 @@ public interface UserService {
     void updateInformation(User user) throws ImoocMallException;
 
 
+    //后台：管理员登录
+    //2022-08-20 编写
+//    User adminLogin(String userName, String password) throws ImoocMallException;
+
+    //后台：管理员登录
+    //2022-08-20 编写
+    boolean checkAdminRole(User user);
 }
