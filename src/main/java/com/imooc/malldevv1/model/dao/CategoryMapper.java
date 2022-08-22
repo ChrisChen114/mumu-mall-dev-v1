@@ -20,7 +20,7 @@ public interface CategoryMapper {
 
 
     //dev_v1 增加
-    //
-
+    //2022-08-21 编写，用于新增目录等查询
+    Category selectByName(String name);
 
 }

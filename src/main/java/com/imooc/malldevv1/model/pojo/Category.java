@@ -2,6 +2,11 @@ package com.imooc.malldevv1.model.pojo;
 
 import java.util.Date;
 
+/**
+ * Category实体类
+ * Category是pojo或do类，是指从数据库所查出来的属性，与数据表是一一对应的
+ * pojo, plain ordinary java object类
+ */
 public class Category {
     private Integer id;
 

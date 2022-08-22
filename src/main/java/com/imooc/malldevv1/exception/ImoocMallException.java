@@ -6,7 +6,9 @@ package com.imooc.malldevv1.exception;
  * 2022-08-19 编写
  */
 //继承自Exception
-public class ImoocMallException extends Exception{
+//将Exception改为RuntimeException运行时异常
+//public class ImoocMallException extends Exception{
+public class ImoocMallException extends RuntimeException {
     //状态码
     private final Integer code;
     //异常信息
@@ -24,7 +26,7 @@ public class ImoocMallException extends Exception{
     }
 
     public ImoocMallException(ImoocMallExceptionEnum exceptionEnum) {
-        this(exceptionEnum.getCode(),exceptionEnum.getMsg());
+        this(exceptionEnum.getCode(), exceptionEnum.getMsg());
     }
 
     public Integer getCode() {
@@ -34,7 +36,6 @@ public class ImoocMallException extends Exception{
     public String getMessage() {
         return message;
     }
-
 
 
 }

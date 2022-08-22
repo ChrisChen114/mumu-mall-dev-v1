@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 /**
  *
- * @Aspect注解 SPring AOP 面向切面编程 Aspect Oriented Programming；
+ * @Aspect注解 Spring AOP 面向切面编程 Aspect Oriented Programming；
  * AOP的做法是将通用、与业务无关的功能抽象封装为切面类；
  * 切面可配置在目标方法的执行前、后运行，真正做到即插即用。
  * @Aspect: 切面，具体的可插拔组件功能类，通常一个切面只实现一个通用功能
