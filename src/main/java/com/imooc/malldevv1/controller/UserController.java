@@ -6,6 +6,7 @@ import com.imooc.malldevv1.exception.ImoocMallException;
 import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
 import com.imooc.malldevv1.model.pojo.User;
 import com.imooc.malldevv1.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +65,7 @@ public class UserController {
     //@RequestMapping是get和post都支持，但不推荐
     //@RequestParam,主要用于将请求参数区域的数据映射到控制层方法的参数上
     @PostMapping("/register")
+    @ApiOperation("注册新用户")
     public ApiRestResponse register(@RequestParam("userName") String userName, @RequestParam("password") String password) throws ImoocMallException, NoSuchAlgorithmException {
         //下面这三重判断，放在controller层中比较合适；通过三重验证后，可以进入service层，然后进行数据库的操作
         //判断用户名和密码是否为空
@@ -92,6 +94,7 @@ public class UserController {
     //2022-08-20 编写
     //@RequestParam,主要用于将请求参数区域的数据映射到控制层方法的参数上
     @PostMapping("/login")
+    @ApiOperation("登录")
     public ApiRestResponse login(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session) throws ImoocMallException, NoSuchAlgorithmException {
         //判断用户名和密码是否为空
         if (StringUtils.isEmpty(userName)) {
@@ -123,6 +126,7 @@ public class UserController {
     //如果入参只有一个，则@RequestParam后面不需要写("signature")；
     // 而如果有多个，则需要在@RequestParam("**")指明具体的字段映射
     @PostMapping("/user/update")
+    @ApiOperation("更新个性签名")
     public ApiRestResponse updateUserInfo(@RequestParam("signature")  String signature,HttpSession session) throws ImoocMallException {
         //从session中获取用户信息；需要传入Constant中定义的用户常量名
         User currentUser = (User)session.getAttribute(Constant.IMOOC_MALL_DEV_V1_USER);
@@ -151,6 +155,7 @@ public class UserController {
     //2022-08-20 编写
     //退出登录模块，不用到Service层，只需在Controller层进行处理即可.
     @PostMapping("/user/logout")
+    @ApiOperation("退出登录")
     public ApiRestResponse logout(HttpSession session){
         //从session中清除登录信息；重点是清除session
         session.removeAttribute(Constant.IMOOC_MALL_DEV_V1_USER);
@@ -167,6 +172,7 @@ public class UserController {
     //2022-08-20 编写
     //@RequestParam,主要用于将请求参数区域的数据映射到控制层方法的参数上
     @PostMapping("/adminLogin")
+    @ApiOperation("管理员登录")
     public ApiRestResponse adminLogin(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session) throws ImoocMallException, NoSuchAlgorithmException {
         //判断用户名和密码是否为空
         if (StringUtils.isEmpty(userName)) {

@@ -125,4 +125,14 @@
     where name = #{name,jdbcType=VARCHAR}
   </select>
 
+  <!-- 后台目录列表；利用分页技术实现 -->
+  <!-- 全部查询 -->
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_category
+  </select>
+
+
+
 </mapper>

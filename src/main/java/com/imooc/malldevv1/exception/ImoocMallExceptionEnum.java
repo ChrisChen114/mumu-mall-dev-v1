@@ -24,6 +24,7 @@ public enum ImoocMallExceptionEnum {
     PARA_NOT_NULL(10010,"名字不能为空"),
     CREATED_FAILED(10011,"新增失败"),
     REQUEST_PARAM_ERROR(10012,"参数错误"),
+    DELETE_FAILED(10013,"删除失败"),
 
 
     //20000打头的，表示系统类型的异常

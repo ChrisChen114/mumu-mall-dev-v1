@@ -1,16 +1,20 @@
 package com.imooc.malldevv1.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.imooc.malldevv1.exception.ImoocMallException;
 import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
 import com.imooc.malldevv1.model.dao.CategoryMapper;
 import com.imooc.malldevv1.model.pojo.Category;
 import com.imooc.malldevv1.model.request.AddCategoryReq;
+import com.imooc.malldevv1.model.vo.CategoryVO;
 import com.imooc.malldevv1.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.validation.constraints.AssertFalse;
+import java.util.List;
 
 
 /**
@@ -62,8 +66,62 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     //后台管理：更新目录分类
+    @Override
+    public void update(Category updateCategory) {
+        //s5，更新时候，尤其名字不能与别人冲突，因此需要到库里先查询
+        //查询的前提是name不能为空
+        if (updateCategory.getName() != null) {
+            Category categoryOld = categoryMapper.selectByName(updateCategory.getName());
+            //这块的判断条件，没想到****************
+            //名字不为空、ID不一样，此时需要给拒绝掉，不能更新，抛出异常
+            //名字不为空、ID不一样，它的意思是库中已有一条目录记录，但是库里ID和传入不一样，根据传入ID进行更新时，就会有两条相同的目录名字，是不符合要求的.
+            //查到的categoryOld的ID不能等于入参传进来的updateCategory的ID
+            //究其根本，就是要保证目录不能重名，但是代码上需要复合判断
+            if (categoryOld != null && !categoryOld.getId().equals(updateCategory.getId())) {
+                //存在冲突，抛出异常
+                throw new ImoocMallException(ImoocMallExceptionEnum.NAME_EXISTED);
+            }
+        }
+
+        //s6, 根据主键进行选择性更新
+        int count = categoryMapper.updateByPrimaryKeySelective(updateCategory);
+        if (count == 0) {
+            //更新失败
+            throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
+
+        }
+    }
+
+
     //后台管理：删除目录分类
+    @Override
+    public void delete(Integer id){
+        //s2,查询待删除的目录id是否为空
+        Category categoryOld = categoryMapper.selectByPrimaryKey(id);
+        if (categoryOld == null){
+            throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
+        }
+        //根据主键删除
+        int count = categoryMapper.deleteByPrimaryKey(id);
+        if (count == 0){
+            throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
+        }
+    }
+
     //后台管理：目录列表（平铺）
+    @Override
+    public PageInfo listForAdmin(Integer pageNum, Integer pageSize){
+        //s2, 利用PageHelper设置分页参数
+        //其中，"type:order_num"是指‘orderBy’
+        PageHelper.startPage(pageNum, pageSize,"type,order_num");
+        //s3, 查询所有目录信息
+        List<Category> categoryList = categoryMapper.selectList();
+        PageInfo pageInfo = new PageInfo<>(categoryList);
+        return pageInfo;
+    }
+
+
+
     //前台管理：目录列表（递归）
 
 }
