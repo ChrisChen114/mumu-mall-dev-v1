@@ -11,9 +11,11 @@ import com.imooc.malldevv1.model.vo.CategoryVO;
 import com.imooc.malldevv1.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import javax.validation.constraints.AssertFalse;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -99,11 +101,13 @@ public class CategoryServiceImpl implements CategoryService {
         //s2,查询待删除的目录id是否为空
         Category categoryOld = categoryMapper.selectByPrimaryKey(id);
         if (categoryOld == null){
+            //当前找不到这个目录记录
             throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
         }
         //根据主键删除
         int count = categoryMapper.deleteByPrimaryKey(id);
         if (count == 0){
+            //删除失败
             throw new ImoocMallException(ImoocMallExceptionEnum.DELETE_FAILED);
         }
     }
@@ -112,10 +116,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public PageInfo listForAdmin(Integer pageNum, Integer pageSize){
         //s2, 利用PageHelper设置分页参数
-        //其中，"type:order_num"是指‘orderBy’
+        //其中，"type:order_num"是指String ‘orderBy’，排序的规则，第1优先级按type，第二优先级按order_num
+        //public static <E> Page<E> startPage(int pageNum, int pageSize, String orderBy)
         PageHelper.startPage(pageNum, pageSize,"type,order_num");
-        //s3, 查询所有目录信息
+        //s3, 新增select查询所有目录信息，赋值给List<Category>
         List<Category> categoryList = categoryMapper.selectList();
+        //s4,将查询的结果赋值给PageInfo，并返回
+        //PageInfo会进行包裹，里面会蕴藏着List<Category> categoryList内容，
+        //此外还包括总数、当前页、下一页等字段
         PageInfo pageInfo = new PageInfo<>(categoryList);
         return pageInfo;
     }
@@ -123,5 +131,48 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     //前台管理：目录列表（递归）
+    @Override
+    @Cacheable(value = "listCategoryForCustomer")  //利用Redis缓存加速响应-S5：Springframework提供的，开启缓存功能
+    //如何验证缓存开启的效果？1.postman等查询时，第1次和其他次的时间对比；2.redis的命令行窗口查询内容。
+    public List<CategoryVO> listCategoryForCustomer(int parentId) {
+        //s2, new一个ArrayList的CategoryVO
+        ArrayList<CategoryVO> categoryVOList = new ArrayList<>();
+        //s3.调用私有方法，递归查询一、二、三级目录
+        recursivelyFindCategories(categoryVOList,parentId);
+        //返回CategoryVO类型的List
+        return categoryVOList;
+    }
 
+    //递归获取所有子类别，并组合成为一个"目录树"
+    private void recursivelyFindCategories(List<CategoryVO> categoryVOList, int parentId) {
+        //S4，根据父id进行select查询
+        //返回的是一个List列表，包含有parentId=0的所有目录，也就是一级目录，比如有6个，如新鲜水果、海鲜水产....
+        List<Category> categoryList = categoryMapper.selectCategoriesByParentId(parentId);
+        //s5，利用CollectionUtils的isEmpty方法，判断categoryList是否为空
+        if(!CollectionUtils.isEmpty(categoryList)){
+            //categoryList有元素，执行下面操作
+            //s6，循环遍历categoryList
+            for (int i = 0; i < categoryList.size(); i++) {
+                //s7，父节点，插入到目录树中
+                Category category = categoryList.get(i);
+                CategoryVO categoryVO = new CategoryVO();
+                //s7-1，拷贝category属性内容到categoryVO中
+                BeanUtils.copyProperties(category,categoryVO);
+                //s7-2，插入一条记录到categoryVOList
+                categoryVOList.add(categoryVO);
+                //s8，子节点，再次递归，插入到目录树中
+                //将categoryVO中的属性private List<CategoryVO> childCategory进行查找并赋值
+                //经过递归后，子、孙目录提取到并赋值到list中.
+                recursivelyFindCategories(categoryVO.getChildCategory(),categoryVO.getId());
+            }
+        }
+        //不需要else，即没有子目录的时候，不进入if判断
+//        else{
+//            //isEmpty(): Return true if the supplied Collection is null or empty. Otherwise, return false.
+//            //此处不能throw一个异常，递归到子孙目录之后，无子目录就返回，然后递归其他层。如果throw
+//            //throw new ImoocMallException(ImoocMallExceptionEnum.CATEGORY_IS_EMPTY);
+//            return;
+//        }
+
+    }
 }

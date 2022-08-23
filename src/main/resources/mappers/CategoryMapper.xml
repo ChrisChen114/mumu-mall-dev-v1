@@ -125,7 +125,8 @@
     where name = #{name,jdbcType=VARCHAR}
   </select>
 
-  <!-- 后台目录列表；利用分页技术实现 -->
+  <!-- 后台目录列表；利用分页技术实现
+        2022-08-23 编写 -->
   <!-- 全部查询 -->
   <select id="selectList" resultMap="BaseResultMap">
     select
@@ -133,6 +134,18 @@
     from imooc_mall_dev_v1_category
   </select>
 
+  <!-- 根据父id查询满足条件的id目录
+       2022-08-23 编写；
+       注意：where id = #{parentId,jdbcType=INTEGER}
+       这里写错了，不是id=#{parentId}，而是parent_id = #{parentId}
+       -->
+  <select id="selectCategoriesByParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_category
+    where parent_id = #{parentId,jdbcType=INTEGER}
+
+  </select>
 
 
 </mapper>

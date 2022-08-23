@@ -90,11 +90,26 @@
         </dependency>
 
         <!-- 引入PageHelper，用于分页处理 -->
-        <!-- 5-9 ..、分页功能开发 -->
+        <!-- 5-9 ..、分页功能开发
+             2022-08-23 引入  -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.13</version>
+        </dependency>
+
+        <!-- 利用Redis缓存加速响应
+            来自视频5-11 利用Redis缓存加速响应;
+            引入两个依赖：第1个是redis，第2个是与redis配套的，用于Spring做缓存的cache依赖
+            2022-08-23 编写
+            利用Redis缓存加速响应-S1：引入两个依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
     </dependencies>
 

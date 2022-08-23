@@ -9,15 +9,18 @@ import com.imooc.malldevv1.model.pojo.Category;
 import com.imooc.malldevv1.model.pojo.User;
 import com.imooc.malldevv1.model.request.AddCategoryReq;
 import com.imooc.malldevv1.model.request.UpdateCategoryReq;
+import com.imooc.malldevv1.model.vo.CategoryVO;
 import com.imooc.malldevv1.service.CategoryService;
 import com.imooc.malldevv1.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 描述：      商品分类模块
@@ -114,6 +117,7 @@ public class CategoryController {
 
     //后台管理：删除目录分类
     //2022-08-23 创建
+    //注意点：删除不存在的目录ID，是不允许删除的。因此删除前，需要查询目录是否存在
     @PostMapping("/admin/category/delete")
     @ApiOperation("后台删除目录分类")
     public ApiRestResponse deleteCategory(@RequestParam("id") Integer id){
@@ -126,9 +130,10 @@ public class CategoryController {
     //后台管理：目录列表（平铺）
     //2022-08-23 编写
     //从请求中传入pageNum和pageSize
-    //技术点：
+    //技术点：利用PageHelper实现分页，返回时使用PageInfo。
+    //pageNum第几页数，pageSize每一页的大小
     @PostMapping("/admin/category/list")
-    @ApiOperation("目录列表（平铺）")
+    @ApiOperation("后台目录列表")
     public ApiRestResponse listCategoryForAdmin(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize){
         //s1, 传入pageNum和pageSize，进入Service层.
         PageInfo pageInfo = categoryService.listForAdmin(pageNum,pageSize);
@@ -138,6 +143,19 @@ public class CategoryController {
 
 
     //前台管理：目录列表（递归）
+    //来自视频5-10 用户分类列表接口开发
     //请求地址 /category/list
+    //技术点： 1.递归查询父目录和子目录；
+    // 2.利用CategoryVO经过组装之后的对象，返回给前端;
+    //利用Redis开启缓存功能，因为用户是比管理员多的多，目录变化的频率并不频繁，做Redis缓存提高整理的响应效率.
+    //对于前台用户而言，不需要入参，返回值由后台定义
+    @GetMapping("/category/list")
+    @ApiOperation("前台目录列表")
+    public ApiRestResponse listCategoryForCustomer(){
+        //s1, 传入0级id（第一级目录），进入service层
+        List<CategoryVO> categoryVOS = categoryService.listCategoryForCustomer(0);
+
+        return ApiRestResponse.success(categoryVOS);
+    }
 
 }

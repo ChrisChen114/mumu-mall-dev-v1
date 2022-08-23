@@ -26,6 +26,10 @@ public interface CategoryMapper {
     Category selectByName(String name);
 
     //2022-08-23 后台目录列表；利用分页技术实现
+    //查询所有目录
     List<Category> selectList();
+
+    //2022-08-23 前台目录列表：查询parentId=0的所有目录记录
+    List<Category>  selectCategoriesByParentId(Integer parentId);
 
 }
