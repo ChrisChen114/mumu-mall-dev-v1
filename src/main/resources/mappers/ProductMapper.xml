@@ -136,6 +136,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.imooc.malldevv1.model.pojo.Product">
     update imooc_mall_dev_v1_product
     set `name` = #{name,jdbcType=VARCHAR},
@@ -149,4 +150,16 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 2022-08-23增加，用于新增商品查询 -->
+  <!-- <include refid="Base_Column_List" />表示一个对象，即select这样一个对象 -->
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_product
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+
+
+
 </mapper>

@@ -1,5 +1,15 @@
 package com.imooc.malldevv1.common;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+/**
+ * 保存常量的类
+ * 2022-08-23 修改
+ *
+ * @Component，其中一个作用是用于setFileUploadDir方法的
+ */
+@Component
 public class Constant {
     //盐值,此处是写的固定的。当然也可以把盐值写入数据库
     public static final String SALT = "SNfha&ivAp,.@!]";
@@ -8,5 +18,24 @@ public class Constant {
     public static final String IMOOC_MALL_DEV_V1_USER = "IMOOC_MALL_DEV_V1_USER";
 
 
+    //后台商品上传图片s3-1,
+    //视频6-4 图片上传接口开发 中提到
+    //往FILE_UPLOAD_DIR注入的话，可以通过增加@Value注解注入（从application.properties获取），然后在配置文件application.properties中增加或修改
+    //注意不能写成final关键字
+    //但是这样写会报nullpointerexception异常，这是第一个坑
+    //原因如下：FILE_UPLOAD_DIR是静态变量，普通的方式注入不进去
+    //解决方案：写一个方法进行赋值
+//    @Value("${file.upload.dir}")       这两行报错
+//    public static String FILE_UPLOAD_DIR;
+    //第二个坑：这个地址http://127.0.0.1:8083/images/c368eef4-2e71-4b13-9210-57f0fbc2d73b.jpg 在浏览器无法显示
+    //解决方案：自定义静态资源映射目录：上传图片后回显，需配置SpringBootWebMvcConfig，进而达到静态资源到本地目录的映射
+
+    public static String FILE_UPLOAD_DIR;
+    //相当于通过set方法，将静态变量进行了一个赋值
+    //此外如果想让Spring帮其注入，需要在Constant类外面增加@Component注解
+    @Value("${file.upload.dir}")
+    public void setFileUploadDir(String fileUploadDir){
+        FILE_UPLOAD_DIR = fileUploadDir;
+    }
 
 }

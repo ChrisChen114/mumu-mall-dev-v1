@@ -16,11 +16,14 @@ import java.util.List;
  * CategoryVO和Category两者很像，但又不一样，Category属于pojo下，是一个实体类；
  * CategoryVO是经过一定的转换之后，返回给前端内容的类
  *
+ * CategoryVO还需要实现implements序列化Serializable
+ *
  * 利用Redis缓存加速响应-S7：CategoryVO implements实现 Serializable，目的将CategoryVO序列化
  *
  * 2022-08-21 创建
  * 2022-08-23 编写
  */
+
 public class CategoryVO implements Serializable {
     private Integer id;
 
