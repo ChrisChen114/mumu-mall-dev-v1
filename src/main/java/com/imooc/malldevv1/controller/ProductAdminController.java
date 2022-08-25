@@ -23,6 +23,7 @@ import java.util.UUID;
 
 /**
  * 用于后台管理员的商品ProductAdminController
+ * Controller层区分前台和后台，但Service层不做区分，因为Service层的背后逻辑很多是一致的
  * 2022-08-23 创建
  * <p>
  * 商品模块：

@@ -8,6 +8,7 @@ import com.imooc.malldevv1.model.dao.ProductMapper;
 import com.imooc.malldevv1.model.pojo.Product;
 import com.imooc.malldevv1.model.request.AddProductReq;
 import com.imooc.malldevv1.model.request.UpdateProductReq;
+import com.imooc.malldevv1.model.vo.ProductVO;
 import com.imooc.malldevv1.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.util.List;
 
 /**
  * 商品服务ProductService实现类
+ * Controller层区分前台和后台，但Service层不做区分，因为Service层的背后逻辑很多是一致的
  * 2022-08-23 创建
  *
  * 增加@Service注解
@@ -156,6 +158,23 @@ public class ProductServiceImpl implements ProductService {
         return pageInfo;
     }
 
+    //前台相关模块
+    //前台商品列表
+    //2022-08-25 创建
+    @Override
+    public void listProductForCustomer(){
+
+    }
 
 
+    //前台商品详情
+    //2022-08-25 创建
+    @Override
+    public Product detail(Integer id){
+        //s2, 根据id查询商品
+        Product product = productMapper.selectByPrimaryKey(id);
+        //s3,返回一个pojo类型的product
+        return product;
+
+    }
 }
