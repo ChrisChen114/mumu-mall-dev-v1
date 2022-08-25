@@ -17,6 +17,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 配置地址映射
  * 2022-08-22 创建
  * 5-6视频：Swagger自动生成API文档
+ * 来自视频6-5 资源映射开发
+ *
  */
 @Configuration  //增加注解，代表这是一个配置类
 public class ImoocMallWebMvcConfig implements WebMvcConfigurer {

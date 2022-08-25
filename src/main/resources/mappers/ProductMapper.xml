@@ -161,5 +161,36 @@
   </select>
 
 
+  <!-- 批量上下架商品
+       2022-08-24 创建
+       第一种更新方案updateSellStatus：在service层中，逐个调用更新上下架状态的update语句
+       第二种更新方案updateSellStatus1：传入ids和sellStatus到productmapper中，在update语句中遍历更新上下架状态
+    -->
+  <update id="updateSellStatus" parameterType="map">
+    update imooc_mall_dev_v1_product
+    set status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateSellStatus1" parameterType="map">
+    update imooc_mall_dev_v1_product
+    set status = #{status,jdbcType=INTEGER}
+    where id in
+    <foreach collection="ids" close=")" item="id" open="(" separator=",">
+      #{id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <!-- 后台商品列表
+       2022-08-24 创建
+       书写时候，忘记了排序order by ，按更新时间降序排序，即最晚更新的排在前面
+       -->
+  <select id="selectListProductForAdmin"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_product
+    order by update_time desc
+  </select>
+
+
 
 </mapper>

@@ -24,7 +24,7 @@ public class Constant {
     //注意不能写成final关键字
     //但是这样写会报nullpointerexception异常，这是第一个坑
     //原因如下：FILE_UPLOAD_DIR是静态变量，普通的方式注入不进去
-    //解决方案：写一个方法进行赋值
+    //解决方案：写一个set方法进行赋值
 //    @Value("${file.upload.dir}")       这两行报错
 //    public static String FILE_UPLOAD_DIR;
     //第二个坑：这个地址http://127.0.0.1:8083/images/c368eef4-2e71-4b13-9210-57f0fbc2d73b.jpg 在浏览器无法显示

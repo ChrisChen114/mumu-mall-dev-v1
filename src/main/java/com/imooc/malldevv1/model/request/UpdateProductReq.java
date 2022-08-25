@@ -1,20 +1,28 @@
-package com.imooc.malldevv1.model.vo;
+package com.imooc.malldevv1.model.request;
 
-import java.io.Serializable;
-import java.util.Date;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
- * ProductVO
- * VO:视图对象，一般用于返回到前端的数据.
- * VO是经过一定的转换之后，返回给前端内容的类
+ * 更新商品的一个请求类
+ * 接收请求参数的类，用于在更新商品的Product类中
+ * <p>
+ * 另外：关于@Valid注解
+ * 注解                      说明
  *
- * ProductVO还需要实现implements序列化Serializable
- * 2022-08-23 创建
- * 2022-08-24 修改
+ * @Valid 需要验证
+ * @NotNull 非空
+ * @Max(value) 最大值
+ * @Size(max=5,min=2) 字符串长度范围限制
  */
-public class ProductVO implements Serializable {
-    private Integer id;
+public class UpdateProductReq {
 
+    @NotNull(message = "商品name不能为null")
+    private Integer id;//需要传入id，之前遗漏了，而且是必传的
+
+    //其他属性上的@NotNull要去掉，因为不一定更新
     private String name;
 
     private String image;
@@ -23,15 +31,14 @@ public class ProductVO implements Serializable {
 
     private Integer categoryId;
 
+    @Min(value = 1,message = "价格不能小于1分钱")  //最小不能小于1分钱
     private Integer price;
 
+    @Max(value=10000,message = "库存不能大于10000")
     private Integer stock;
 
     private Integer status;
 
-    private Date createTime;
-
-    private Date updateTime;
 
     public Integer getId() {
         return id;
@@ -95,21 +102,5 @@ public class ProductVO implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

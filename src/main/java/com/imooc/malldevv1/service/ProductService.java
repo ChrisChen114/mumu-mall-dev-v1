@@ -1,6 +1,8 @@
 package com.imooc.malldevv1.service;
 
+import com.github.pagehelper.PageInfo;
 import com.imooc.malldevv1.model.request.AddProductReq;
+import com.imooc.malldevv1.model.request.UpdateProductReq;
 
 /**
  * 商品ProductService
@@ -15,4 +17,19 @@ public interface ProductService {
     void addProduct(AddProductReq addProductReq);
 
 
+    //更新商品
+    //2022-08-24 创建
+    void     updateProduct(UpdateProductReq updateProductReq);
+
+    //删除商品
+    //2022-08-23 创建
+    void deleteProduct(Integer id);
+
+    //删除商品
+    //2022-08-24 创建
+    void batchUpdateSellStatus(Integer[] ids, Integer sellStatus);
+
+    //后台商品列表
+    //2022-08-24 编写
+    PageInfo listProductForAdmin(Integer pageNum, Integer pageSize);
 }

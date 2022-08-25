@@ -1,10 +1,12 @@
 package com.imooc.malldevv1.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.imooc.malldevv1.common.ApiRestResponse;
 import com.imooc.malldevv1.common.Constant;
 import com.imooc.malldevv1.exception.ImoocMallException;
 import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
 import com.imooc.malldevv1.model.request.AddProductReq;
+import com.imooc.malldevv1.model.request.UpdateProductReq;
 import com.imooc.malldevv1.service.ProductService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,13 +71,13 @@ public class ProductAdminController {
 
     //上传图片
     //2022-08-23 创建
-    //技术点：1）UUID生成文件名；2）把含地址的全路径返回给前端；3）配置映射地址。
+    //技术点：1）UUID生成文件名；2）把含地址的文件路径返回给前端；3）配置映射地址，让浏览器能显示图片。
     //补充：upload整个代码均是在Controller中，可以把相关业务代码放到service层中
     @ApiOperation("后台商品上传图片")
     @PostMapping("/upload/file")
     public ApiRestResponse upload(HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file) {
-        //s0, 传入HttpServletRequest，用于在图片地址中保存地址，比如url、ip等
-        //s0, 传入MultipartFile对象，需要用到注解@RequestParam，从请求参数中获取
+        //s0, 传入HttpServletRequest，用于在图片地址中包含host地址，比如url、ip等
+        //s0, 传入MultipartFile对象，需要用到注解@RequestParam，从请求参数的body-formdata中获取
 
         //s1,获取原始文件名，再拿到后缀；后缀肯定是不变的，后缀复用
         String fileName = file.getOriginalFilename();
@@ -108,8 +110,8 @@ public class ProductAdminController {
             throw new RuntimeException(e);
         }
 
-        //把地址给返回回去
-        //s6，返回："data": "http://127.0.0.1:8082/upload/b899f512-3467-4c71-8d2d-2d491b21f429.png"
+        //s6，把地址给返回前端
+        //返回："data": "http://127.0.0.1:8082/upload/b899f512-3467-4c71-8d2d-2d491b21f429.png"
         try {
             //路径中包括ip和端口号
             //注意：是getRequestURL(),不是.getRequestURI()，之前写错了
@@ -139,12 +141,18 @@ public class ProductAdminController {
 
     //更新商品
     //2022-08-23 创建
-    //技术点：1）
+    //2022-08-24 编写
+    //技术点：1）名字不为空（同名）、ID不一样，此时需要给拒绝掉，不能更新，抛出异常
+    //2) 选择性更新updateByPrimaryKeySelective方法进行更新
     @ApiOperation("后台更新商品")
     @PostMapping("/product/update")
-    public ApiRestResponse update() {
+    public ApiRestResponse update(@Valid @RequestBody UpdateProductReq updateProductReq) {
+        //note: 更新和新增商品两个模块合并，但是合并写法不可取，始终保持业务逻辑清晰、独立
+        //note: 使用UpdateProductReq，而不是AddProductReq，因为更新商品时候需要传入id
+        //s0，新建UpdateProductReq，id要传入而且是@notnull，其他属性要去掉@notnull
 
-
+        //s1,传入updateProductReq，进入service层
+        productService.updateProduct(updateProductReq);
         //返回："data": null
         return ApiRestResponse.success();
     }
@@ -152,12 +160,14 @@ public class ProductAdminController {
 
     //删除商品
     //2022-08-23 创建
-    //技术点：1）
+    //技术点：1）根据id进行删除
+    //注意点：删除商品一般在业务上不是很推荐，可以更新，可以上下架，下架同样达到类似删除的效果（用户看不见即可）
     @ApiOperation("后台删除商品")
     @PostMapping("/product/delete")
-    public ApiRestResponse delete() {
+    public ApiRestResponse delete(@RequestParam("id") Integer id) {
 
-
+        //s1，传入id，进入service层
+        productService.deleteProduct(id);
         //返回："data": null
         return ApiRestResponse.success();
     }
@@ -165,11 +175,14 @@ public class ProductAdminController {
 
     //批量上下架商品
     //2022-08-23 创建
-    //技术点：1）
+    //技术点：传入的ids是数组；在update语句中使用foreach循环（初次使用）
+    //入参：1）传入的id是数组，多个id；2）传入sellStatus(0是下架，1是上架)
     @ApiOperation("后台批量上下架商品")
     @PostMapping("/product/batchUpdateSellStatus")
-    public ApiRestResponse batchUpdateSellStatus() {
+    public ApiRestResponse batchUpdateSellStatus(@RequestParam("ids") Integer[] ids,@RequestParam("sellStatus") Integer sellStatus) {
 
+        //s1，传入ids和sellStatus，进入service层
+        productService.batchUpdateSellStatus(ids,sellStatus);
 
         //返回："data": null
         return ApiRestResponse.success();
@@ -178,14 +191,15 @@ public class ProductAdminController {
 
     //商品列表（后台）
     //2022-08-23 创建
-    //技术点：1）
-    @ApiOperation("后台删除商品")
+    //技术点：1）利用PageHelper和PageInfo
+    @ApiOperation("后台商品列表")
     @GetMapping("/product/list")
-    public ApiRestResponse list() {
-
+    public ApiRestResponse list(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
+        //s1，传入pageNum和pageSize，进入service层
+        PageInfo pageInfo = productService.listProductForAdmin(pageNum, pageSize);
 
         //返回："data": {"total":20,"list":[{....}],....
-        return ApiRestResponse.success();
+        return ApiRestResponse.success(pageInfo);
     }
 
 
