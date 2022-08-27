@@ -3,8 +3,8 @@ package com.imooc.malldevv1.service;
 import com.github.pagehelper.PageInfo;
 import com.imooc.malldevv1.model.pojo.Product;
 import com.imooc.malldevv1.model.request.AddProductReq;
+import com.imooc.malldevv1.model.request.ProductListReq;
 import com.imooc.malldevv1.model.request.UpdateProductReq;
-import com.imooc.malldevv1.model.vo.ProductVO;
 
 /**
  * 商品ProductService
@@ -38,7 +38,7 @@ public interface ProductService {
     //前台相关模块
     //前台商品列表
     //2022-08-25 创建
-    void listProductForCustomer();
+    PageInfo listProductForCustomer(ProductListReq productListReq);
 
     //前台商品详情
     //2022-08-25 创建

@@ -1,6 +1,7 @@
 package com.imooc.malldevv1.model.dao;
 
 import com.imooc.malldevv1.model.pojo.Product;
+import com.imooc.malldevv1.model.query.ProductListQuery;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +41,9 @@ public interface ProductMapper {
     //2022-08-24 创建
     List<Product> selectListProductForAdmin();
 
+    //前台商品列表
+    //2022-08-25
+    List<Product> selectList(@Param("query") ProductListQuery query);
 
 
 }

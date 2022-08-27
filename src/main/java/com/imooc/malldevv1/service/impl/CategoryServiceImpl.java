@@ -134,7 +134,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Cacheable(value = "listCategoryForCustomer")  //利用Redis缓存加速响应-S5：Springframework提供的，开启缓存功能
     //如何验证缓存开启的效果？1.postman等查询时，第1次和其他次的时间对比；2.redis的命令行窗口查询内容。
-    public List<CategoryVO> listCategoryForCustomer(int parentId) {
+    public List<CategoryVO> listCategoryForCustomer(Integer parentId) {
         //s2, new一个ArrayList的CategoryVO
         ArrayList<CategoryVO> categoryVOList = new ArrayList<>();
         //s3.调用私有方法，递归查询一、二、三级目录
@@ -144,7 +144,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     //递归获取所有子类别，并组合成为一个"目录树"
-    private void recursivelyFindCategories(List<CategoryVO> categoryVOList, int parentId) {
+    private void recursivelyFindCategories(List<CategoryVO> categoryVOList, Integer parentId) {
         //S4，根据父id进行select查询
         //返回的是一个List列表，包含有parentId=0的所有目录，也就是一级目录，比如有6个，如新鲜水果、海鲜水产....
         List<Category> categoryList = categoryMapper.selectCategoriesByParentId(parentId);

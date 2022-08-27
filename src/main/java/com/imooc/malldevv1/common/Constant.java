@@ -1,7 +1,10 @@
 package com.imooc.malldevv1.common;
 
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 /**
  * 保存常量的类
@@ -37,5 +40,16 @@ public class Constant {
     public void setFileUploadDir(String fileUploadDir){
         FILE_UPLOAD_DIR = fileUploadDir;
     }
+
+
+    //前台商品列表：排序功能
+    //枚举：order by，即要求所有的排序方式必须在我们的掌控之中，而不是前端传什么我们就去查什么
+    //2022-08-26
+    public interface ProductListOrderBy{
+        //
+        Set<String> PRICE_ASC_DESC = Sets.newHashSet("price desc","price asc");
+
+    }
+
 
 }

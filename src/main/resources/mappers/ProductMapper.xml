@@ -191,6 +191,32 @@
     order by update_time desc
   </select>
 
+  <!-- selectList查询 for customer
+       2022-08-25 创建
+       1）parameterType是一个类：ProductListQuery
+       2）<where>语句，if判断,like的意思是模糊查找的意思
+       关键字in是in一个列表
+       status必须是上架商品，注意点
+       -->
+  <select id="selectList"  resultMap="BaseResultMap" parameterType="com.imooc.malldevv1.model.query.ProductListQuery">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_product
+    <where>
+      <if test="query.keyword != null">
+        and name like #{query.keyword}
+      </if>
+      <if test="query.categoryIds != null">
+        and category_id in
+        <foreach collection="query.categoryIds" close=")" item="item" open="(" separator=",">
+          #{item}
+        </foreach>
+      </if>
+      and status =1
+    </where>
+    order by update_time desc
+  </select>
+
 
 
 </mapper>

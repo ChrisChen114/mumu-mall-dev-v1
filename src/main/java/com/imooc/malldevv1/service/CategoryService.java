@@ -26,7 +26,7 @@ public interface CategoryService {
     PageInfo listForAdmin(Integer pageNum, Integer pageSize);
 
     //前台管理：目录列表（递归）
-    List<CategoryVO> listCategoryForCustomer(int parentId);
+    List<CategoryVO> listCategoryForCustomer(Integer parentId);
 
     //前台管理：目录列表（递归）
 

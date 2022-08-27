@@ -2,18 +2,25 @@ package com.imooc.malldevv1.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.imooc.malldevv1.common.Constant;
 import com.imooc.malldevv1.exception.ImoocMallException;
 import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
 import com.imooc.malldevv1.model.dao.ProductMapper;
 import com.imooc.malldevv1.model.pojo.Product;
+import com.imooc.malldevv1.model.query.ProductListQuery;
 import com.imooc.malldevv1.model.request.AddProductReq;
+import com.imooc.malldevv1.model.request.ProductListReq;
 import com.imooc.malldevv1.model.request.UpdateProductReq;
-import com.imooc.malldevv1.model.vo.ProductVO;
+import com.imooc.malldevv1.model.vo.CategoryVO;
+import com.imooc.malldevv1.service.CategoryService;
 import com.imooc.malldevv1.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpSessionIdListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +36,9 @@ public class ProductServiceImpl implements ProductService {
     //注入商品持久层映射器
     @Autowired
     ProductMapper productMapper;
+
+    @Autowired
+    CategoryService categoryService;
 
     //后台增加商品
     //2022-08-23 创建
@@ -162,8 +172,87 @@ public class ProductServiceImpl implements ProductService {
     //前台商品列表
     //2022-08-25 创建
     @Override
-    public void listProductForCustomer(){
+    public PageInfo listProductForCustomer(ProductListReq productListReq){
+        //思路：复杂查询，通常是构建一个Query对象，专门用于查询的.
+        //s2,构建ProductListQuery类，Query对象:
+        //属性：关键字keyword;目录信息，往往是一个列表 List<Integer> categoryIds;
+        ProductListQuery productListQuery = new ProductListQuery();
+        
+        //s3，根据关键字，进行搜索处理
+        //s3-1,判断关键字是否为空;
+        //因为在Controller中未对ProductListReq进行@Valid注解的使用，需要进行入参判空，对应技术点2
+        if(!StringUtils.isEmpty(productListReq.getKeyword())){
+            //s3-2,对应技术点2的加%通配符，达到的拼接效果就是： %keyword%
+            //使用这样的一个keyword到数据库中进行查找
+            String keyword = new StringBuilder().append("%").append(productListReq.getKeyword()).append("%").toString();
+            //s3-3,设置查询关键字
+            productListQuery.setKeyword(keyword);//设置搜索关键字的的查询
+        }
 
+        //S4，目录处理
+        //视频PPT内容：对于查询目录的in处理：
+        //1）目录处理：如果查某个目录下的商品，不仅是需要查出该目录下的，还要把所有子目录的所有商品都查出来，所以要拿到一个目录id的List
+        //2）所以这里要拿到某一个目录Id下的所有子目录id的List
+
+        //s4-1,判断入参目录id是否为空，即入参有没有传这个
+        if (productListReq.getCategoryId() != null){
+            //s4-2,从categoryService中的listCategoryForCustomer方法获取目录列表（当前所在的目录id号）
+            List<CategoryVO> categoryVOList = categoryService.listCategoryForCustomer(productListReq.getCategoryId());
+            //categoryVOList是一个树状结构（里面是一个递归结构），需要把它平铺开来，然后保存每个id号
+            //s4-3,创建一个分类目录的id List
+            ArrayList<Integer> categoryIds = new ArrayList<>();
+            //s4-4,把当前要查询的目录加入，即请求中传入的id
+            categoryIds.add(productListReq.getCategoryId());
+            //s5,把当前目录下面的子目录Id查询出来，结果包含了所有的目录id
+            getCategoryIds(categoryVOList,categoryIds);
+
+            //5-1,加入productListQuery中
+            productListQuery.setCategoryIds(categoryIds);//设置目录ids的查询
+
+        }
+
+        //s6，排序处理（请求中传入的排序属性）
+        String orderBy = productListReq.getOrderBy();
+        //判断排序方式是否存在
+        //6-1,在Constant类中，增加一个set集合，判断是否包含入参的排序方式。
+        if (Constant.ProductListOrderBy.PRICE_ASC_DESC.contains(orderBy)){
+            //存在，则传入请求参数中的pageNum,pageSize，和orderBy属性
+            PageHelper.startPage(productListReq.getPageNum(), productListReq.getPageSize(),orderBy);
+        }else{
+            //不存在不支持排序，则传入请求参数中的pageNum,pageSize
+            PageHelper.startPage(productListReq.getPageNum(), productListReq.getPageSize());
+        }
+
+
+        //s7，根据productListQuery的Query类，查询商品列表
+        List<Product> productList = productMapper.selectList(productListQuery);
+
+        //s8，返回pageInfo
+        PageInfo pageInfo = new PageInfo(productList);
+        return pageInfo;
+        
+    }
+
+    //s5的具体
+    //递归函数，categoryVOList是一个树状结构（里面是一个递归结构），需要把它平铺开来，然后保存每个id号
+    //2022-08-26 修改
+    private void getCategoryIds(List<CategoryVO> categoryVOList, ArrayList<Integer> categoryIds) {
+        //敲itli == Iterate elements of java.util.List
+//        for (int i = 0; i < categoryVOList.size(); i++) {
+//            CategoryVO categoryVO =  categoryVOList.get(i);
+//
+//        }
+
+        for (int i = 0; i < categoryVOList.size(); i++) {
+            CategoryVO categoryVO = categoryVOList.get(i);
+            //判断子节点是否为null
+            if (categoryVO != null){
+                //把当前这个目录加入
+                categoryIds.add(categoryVO.getId());
+                //继续进行子孙的递归查找
+                getCategoryIds(categoryVO.getChildCategory(),categoryIds);
+            }
+        }
     }
 
 
