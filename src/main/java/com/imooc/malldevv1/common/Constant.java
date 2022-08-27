@@ -51,5 +51,30 @@ public class Constant {
 
     }
 
+    //定义在售和停售标识
+    //商品上架状态：0-下架，1-上架
+    //2022-08-26 创建
+    //视频7-3 添加商品接口开发
+    public interface SaleStatus {
+        //自己写法
+//        public static final Integer SALE = 1;
+//        public static final Integer NOT_SALE = 0;//下架
+
+        Integer SALE = 1;
+        Integer NOT_SALE = 0;//下架
+    }
+
+    //是否已勾选：0代表未勾选，1代表已勾选
+    //2022-08-26 创建
+    //视频7-3 添加商品接口开发
+    public interface Cart {
+        //自己写法
+//        public static final Integer CHECKED = 1;
+//        public static final Integer NOT_CHECKED = 0;
+        Integer CHECKED = 1;
+        Integer NOT_CHECKED = 0;
+    }
+
+
 
 }

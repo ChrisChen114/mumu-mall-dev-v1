@@ -80,6 +80,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.imooc.malldevv1.model.pojo.Cart">
     update imooc_mall_dev_v1_cart
     <set>
@@ -104,6 +105,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.imooc.malldevv1.model.pojo.Cart">
     update imooc_mall_dev_v1_cart
     set product_id = #{productId,jdbcType=INTEGER},
@@ -114,4 +116,34 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 添加商品到购物车
+    2022-08-26编写
+    user_id = #{userId}，而不是id = #{userId}
+    -->
+  <select id="selectByUserIdAndProductId" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from imooc_mall_dev_v1_cart
+    where user_id = #{userId,jdbcType=INTEGER} and product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+<!-- 购物车列表模块
+    技术点：需要用到left join左连接表，注意连接点on的条件.
+    left join：保留左表所有的记录，然后跟右表去连接；如果右表有符合条件的记录，就直接连接，没有的话，用null值连接.
+    其本质就是要通过两个表的连接，组装成CartVO，返回给前端.
+    totalPrice在selectList语句中未处理?
+    CartVO应对应resultType，而不是resultMap ****
+    2022-08-26 编写 -->
+
+  <select id="selectList" resultType="com.imooc.malldevv1.model.vo.CartVO" parameterType="java.lang.Integer">
+    select  c.id as id, p.id as productId, c.user_id as userId,
+            c.quantity as quantity, c.selected as selected, p.price as price,
+            p.name as productName, p.image as productImage
+    from imooc_mall_dev_v1_cart c left join imooc_mall_dev_v1_product p on p.id = c.product_id
+    where c.user_id = #{userId,jdbcType=INTEGER}
+      and p.status = 1
+  </select>
+
+
 </mapper>
