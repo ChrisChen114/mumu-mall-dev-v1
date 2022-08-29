@@ -32,4 +32,13 @@ public interface CartMapper {
     //购物车列表模块
     //2022-08-26 编写
     List<CartVO> selectList(@Param("userId") Integer userId);
+
+
+    //更新购物车某个商品的数量
+    //2022-08-28 编写
+//    Cart selectByProductId( @Param("productId") Integer productId);
+
+    //选中/不选中购物车的某个商品
+    int selectOrNot(@Param("userId") Integer userId, @Param("productId") Integer productId,@Param("selected") Integer selected);
+
 }

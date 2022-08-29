@@ -51,7 +51,7 @@ public class Constant {
 
     }
 
-    //定义在售和停售标识
+    //定义在售和停售标识；是枚举
     //商品上架状态：0-下架，1-上架
     //2022-08-26 创建
     //视频7-3 添加商品接口开发
@@ -60,8 +60,8 @@ public class Constant {
 //        public static final Integer SALE = 1;
 //        public static final Integer NOT_SALE = 0;//下架
 
-        Integer SALE = 1;
-        Integer NOT_SALE = 0;//下架
+        Integer SALE = 1;//上架状态
+        Integer NOT_SALE = 0;//商品下架状态
     }
 
     //是否已勾选：0代表未勾选，1代表已勾选
@@ -71,8 +71,8 @@ public class Constant {
         //自己写法
 //        public static final Integer CHECKED = 1;
 //        public static final Integer NOT_CHECKED = 0;
-        Integer CHECKED = 1;
-        Integer NOT_CHECKED = 0;
+        Integer CHECKED = 1;//购物车选中状态
+        Integer NOT_CHECKED = 0;//购物车未选中状态
     }
 
 

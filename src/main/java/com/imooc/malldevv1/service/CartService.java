@@ -32,17 +32,17 @@ public interface CartService {
 
     //更新购物车某个商品的数量
     //2022-08-26 创建
-    void update(Integer productId, Integer count);
+    List<CartVO> update(Integer userId, Integer productId, Integer count);
 
     //删除购物车的某个商品
     //2022-08-26 创建
-    void delete(Integer productId);
+    List<CartVO> delete(Integer userId, Integer productId);
 
     //选中/不选中购物车的某个商品
     //2022-08-26 创建
-    void select(Integer productId, Integer selected);
+    List<CartVO> selectOrNot(Integer userId,Integer productId, Integer selected);
 
     //全选/全不选购物车的某个商品
     //2022-08-26 创建
-    void selectAll(Integer selected);
+    List<CartVO> selectAllOrNot(Integer userId,Integer selected);
 }
