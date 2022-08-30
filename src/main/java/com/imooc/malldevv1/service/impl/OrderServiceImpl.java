@@ -8,15 +8,17 @@ import com.imooc.malldevv1.model.dao.CartMapper;
 import com.imooc.malldevv1.model.dao.OrderItemMapper;
 import com.imooc.malldevv1.model.dao.OrderMapper;
 import com.imooc.malldevv1.model.dao.ProductMapper;
-import com.imooc.malldevv1.model.pojo.Cart;
 import com.imooc.malldevv1.model.pojo.Order;
 import com.imooc.malldevv1.model.pojo.OrderItem;
 import com.imooc.malldevv1.model.pojo.Product;
 import com.imooc.malldevv1.model.request.CreateOrderReq;
 import com.imooc.malldevv1.model.vo.CartVO;
+import com.imooc.malldevv1.model.vo.OrderItemVO;
+import com.imooc.malldevv1.model.vo.OrderVO;
 import com.imooc.malldevv1.service.CartService;
 import com.imooc.malldevv1.service.OrderService;
 import com.imooc.malldevv1.util.OrderCodeFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +33,7 @@ import java.util.List;
  */
 
 @Service
-@Transactional(rollbackFor = Exception.class)  //遇到任何异常都会回滚
+
 public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderMapper orderMapper;
@@ -51,9 +53,10 @@ public class OrderServiceImpl implements OrderService {
     //前台创建订单
     //2022-08-29 创建
     //返回值是orderNo
+    @Transactional(rollbackFor = Exception.class)  //遇到任何异常都会回滚
     @Override
     public String create(CreateOrderReq createOrderReq) {
-        //s2，在类外面开启数据库事务：@Transactional(rollbackFor = Exception.class)  //遇到任何异常都会回滚
+        //s2，在create方法外面开启数据库事务：@Transactional(rollbackFor = Exception.class)  //遇到任何异常都会回滚
 
         //s3，拿到用户ID. 从UserFilter拿到
         Integer userId = UserFilter.currentUser.getId();
@@ -62,16 +65,18 @@ public class OrderServiceImpl implements OrderService {
         //List<Order> orderList = orderMapper.selectCheckedItem(userId);
         //int countChecked = 0;
 
-        //购物车列表方法
+        //s4-1，调用购物车列表方法
         List<CartVO> cartVOList = cartService.list(userId);
-        List<CartVO> cartVOListTemp = new ArrayList<>();//临时存储用的
+        //s4-2，将已经勾选的，临时存储到cartVOListTemp中
+        List<CartVO> cartVOListTemp = new ArrayList<>();
         for (int i = 0; i < cartVOList.size(); i++) {
             CartVO cartVO = cartVOList.get(i);
             if (cartVO.getSelected().equals(Constant.Cart.CHECKED)) {
                 cartVOListTemp.add(cartVO);
             }
         }
-        cartVOList = cartVOListTemp;//更新cartVOList，只包含选中的
+        //s4-3，更新cartVOList，只包含选中的
+        cartVOList = cartVOListTemp;
 
         //s5,如果购物车已勾选的商品为空，则报错
         //自己写成cartVOListTemp.size() == 0，可能不太好
@@ -83,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         //s6,判断商品是否存在、上下架状态、库存
         validSaleStatusAndStock(cartVOList);
 
-        //s7，把购物车对象转为订单Item对象
+        //s7，把购物车对象转为订单Order_Item对象
         List<OrderItem> orderItemList = cartVOListToOrderItemList(cartVOList);
 
         //s8，扣库存
@@ -94,9 +99,10 @@ public class OrderServiceImpl implements OrderService {
 
         //***
         //s10，生成订单，
+        //这块也能抽出去形成方法，但是要传递的参数很多
         Order order = new Order();
         //s10-1，生成订单号，有独立的规则，（根据id进行加密+加随机数组成固定长度编码）
-        //具体查看util包下的OrderCodeFactory类
+        //具体查看util包下的OrderCodeFactory类；代码是视频里提供的
         String orderNo = OrderCodeFactory.getOrderCode(Long.valueOf(userId));
         order.setOrderNo(orderNo);
         order.setUserId(userId);
@@ -105,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
         order.setReceiverName(createOrderReq.getReceiverName());
         order.setReceiverMobile(createOrderReq.getReceiverMobile());
         order.setReceiverAddress(createOrderReq.getReceiverAddress());
-        //s10-3，状态
+        //s10-3，状态;在Constant包中定义枚举类OrderStatusEnum
         order.setOrderStatus(Constant.OrderStatusEnum.NOT_PAID.getCode());//定义一个枚举
         order.setPostage(0);
         order.setPaymentType(1);
@@ -213,5 +219,60 @@ public class OrderServiceImpl implements OrderService {
         return totalPrice;
     }
 
+    //前台创建详情
+    //2022-08-30 创建
+    //返回值是OrderVO
+    @Override
+    public OrderVO detail(String orderNo){
+
+        //为了安全起见，不允许暴露主键，所以oderMapper.selectByPrimaryKey方法不能用.
+
+        //s，拿到用户ID. 从UserFilter拿到
+        Integer userId = UserFilter.currentUser.getId();
+
+//        List<OrderItem> orderItemList = orderItemMapper.selectByOrderNoinOrder_Item(orderNo);
+//        System.out.println(orderItemList);
+//        return null;
+
+        //s,根据订单号orderNo，查询订单
+        Order order = orderMapper.selectByOrderNoInOrder(orderNo);
+        if(order == null){
+            throw new ImoocMallException(ImoocMallExceptionEnum.NO_ORDER);
+        }
+        //订单存在，则判断所属
+        if (!order.getUserId().equals(userId)){
+            throw new ImoocMallException(ImoocMallExceptionEnum.NOT_YOUR_ORDER);
+        }
+        //s，获取订单详情信息，经组装后返回给前端
+        OrderVO orderVO = getOrderVO(order);
+
+        //s,获取状态码对应的中文，比如购物车、下单、付款、出库、交易成功
+        orderVO.setOrderStatusName(Constant.OrderStatusEnum.NOT_PAID.getValue());
+        //s
+        return orderVO;
+    }
+
+    //s，获取订单详情信息，经组装后返回给前端
+    private OrderVO getOrderVO(Order order) {
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(order,orderVO);
+        List<OrderItem> orderItemList = orderItemMapper.selectByOrderNoinOrder_Item(order.getOrderNo());
+        //!用错....
+        if(CollectionUtils.isEmpty(orderItemList)){
+            throw new ImoocMallException(ImoocMallExceptionEnum.NO_ORDER);
+        }
+
+        List<OrderItemVO> orderItemVOList = new ArrayList<>();
+        for (int i = 0; i < orderItemList.size(); i++) {
+            OrderItemVO orderItemVO = new OrderItemVO();
+            OrderItem orderItem = orderItemList.get(i);
+            BeanUtils.copyProperties(orderItem,orderItemVO);
+            orderItemVOList.add(orderItemVO);
+        }
+
+        //
+        orderVO.setOrderItemVOList(orderItemVOList);
+        return orderVO;
+    }
 
 }

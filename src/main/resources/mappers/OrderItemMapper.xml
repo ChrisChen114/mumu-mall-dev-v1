@@ -137,6 +137,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.imooc.malldevv1.model.pojo.OrderItem">
     update imooc_mall_dev_v1_order_item
     set order_no = #{orderNo,jdbcType=VARCHAR},
@@ -150,4 +151,18 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 前台订单详情
+   2022-08-30 创建
+   resultMap
+   <include refid="Base_Column_List"></include>忘记使用
+-->
+  <select id="selectByOrderNoinOrder_Item" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List"></include>
+    from imooc_mall_dev_v1_order_item
+    where order_no = #{orderNo,jdbcType = VARCHAR}
+  </select>
+
+
 </mapper>

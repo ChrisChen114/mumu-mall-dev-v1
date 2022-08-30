@@ -26,9 +26,11 @@ public interface OrderMapper {
     //dev_v1 增加
     //前台创建订单
     //2022-08-29 创建
-    List<Order> selectCheckedItem(@Param("userId") Integer userId);
+    //List<Order> selectCheckedItem(@Param("userId") Integer userId);
 
-
+    //前台订单详情
+    //2022-08-30
+    Order selectByOrderNoInOrder(@Param("orderNo") String orderNo);
 
 
 }

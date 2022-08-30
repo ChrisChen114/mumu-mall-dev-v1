@@ -94,7 +94,9 @@ public class Constant {
             this.code = code;
         }
 
+        //根据code，返回对应的枚举
         public static OrderStatusEnum codeOf(Integer code){
+            //values是指上面的5个枚举值
             for(OrderStatusEnum orderStatusEnum:values()){
                 if (orderStatusEnum.getCode() == code){
                     return orderStatusEnum;

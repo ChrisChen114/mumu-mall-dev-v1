@@ -18,8 +18,7 @@ import java.util.Random;
 
 public class OrderCodeFactory {
 
-    //订单类别头
-    //都是1打头的
+    //订单类别头    //都是1打头的
     private static final String ORDER_CODE = "1";//
 
     //随机码
@@ -52,7 +51,7 @@ public class OrderCodeFactory {
         long min = 1, max = 9;
         //i从1开始，不是从0开始
         //之前写错了.
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i < n; i++) {
             min *= 10;
             max *= 10;
         }
@@ -61,6 +60,12 @@ public class OrderCodeFactory {
     }
 
     //生成不带类别标头的编码
+/*
+1.修饰一个代码块,被修饰的代码块称为同步语句块,其作用的范围是大括号{}括起来的代码,作用的对象是调用这个代码块的对象;
+2.修饰一个方法,被修饰的方法称为同步方法,其作用的范围是整个方法,作用的对象是调用这个方法的对象;
+3.修改一个静态的方法,其作用的范围是整个静态方法,作用的对象是这个类的所有对象;------------->>>>>>
+4.修改一个类,其作用的范围是synchronized后面括号括起来的部分,作用主的对象是这个类的所有对象。
+*/
     private static synchronized String getCode(Long userId) {
         userId = userId == null ? 10000 : userId;
         return getDateTime() + toCode(userId);

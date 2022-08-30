@@ -1,6 +1,7 @@
 package com.imooc.malldevv1.service;
 
 import com.imooc.malldevv1.model.request.CreateOrderReq;
+import com.imooc.malldevv1.model.vo.OrderVO;
 
 /**
  * OrderService接口类
@@ -13,4 +14,8 @@ public interface OrderService {
     String create(CreateOrderReq createOrderReq);
 
 
+    //前台创建详情
+    //2022-08-30 创建
+    //返回值是OrderVO
+    OrderVO detail(String orderNo);
 }

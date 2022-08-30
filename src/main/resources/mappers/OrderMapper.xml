@@ -214,11 +214,24 @@
 
   <!-- 前台创建订单
        2022-08-29 创建
+       未使用
   -->
-  <select id="selectCheckedItem" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select
-    from imooc_mall_dev_v1_order
-    where user_id = #{userId,jdbcType = INTEGER}
-  </select>
+<!--  <select id="selectCheckedItem" parameterType="java.lang.Integer" resultMap="BaseResultMap">-->
+<!--    select-->
+<!--    from imooc_mall_dev_v1_order-->
+<!--    where user_id = #{userId,jdbcType = INTEGER}-->
+<!--  </select>-->
+
+  <!-- 前台订单详情
+     2022-08-30 创建
+     <include refid="Base_Column_List"></include>忘记使用
+-->
+    <select id="selectByOrderNoInOrder" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"></include>
+      from imooc_mall_dev_v1_order
+      where order_no = #{orderNo,jdbcType = VARCHAR}
+    </select>
+
 
 </mapper>
