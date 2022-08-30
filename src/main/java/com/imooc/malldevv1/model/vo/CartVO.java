@@ -10,7 +10,7 @@ package com.imooc.malldevv1.model.vo;
  */
 
 
-public class CartVO   {
+public class CartVO {
 
     private Integer id;
 

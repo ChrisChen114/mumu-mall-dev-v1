@@ -1,7 +1,10 @@
 package com.imooc.malldevv1.model.dao;
 
 import com.imooc.malldevv1.model.pojo.Order;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 //Repository，语义注解，说明当前类用于业务持久层，通常描述对应Dao类
@@ -21,7 +24,9 @@ public interface OrderMapper {
 
 
     //dev_v1 增加
-    //
+    //前台创建订单
+    //2022-08-29 创建
+    List<Order> selectCheckedItem(@Param("userId") Integer userId);
 
 
 

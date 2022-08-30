@@ -71,7 +71,7 @@ public class CartController {
     //更新购物车某个商品的数量
     //2022-08-26 创建
     //2022-08-28 编写
-    //技术点：1）兜底的异常处理；2）根据userId和productId，查询到该商品；3）数量更新
+    //技术点：1）兜底的异常处理；2）根据userId和productId，查询到该商品；3）数量更新（数量并不是相加，而是直接更新数量）
     //productId商品ID，count数量
     @PostMapping("/update")
     @ApiOperation("更新购物车某个商品的数量")   //增加这个Swagger注解，即可生成swagger API文档
@@ -88,14 +88,14 @@ public class CartController {
     //删除购物车的某个商品
     //2022-08-26 创建
     //2022-08-28 编写
-    //技术点：1）不能传入userId和cartId，否则可以删除别人的购物车
+    //技术点：1）params中，不能传入userId和cartId，否则可以删除别人的购物车
     //productId商品ID
     @PostMapping("/delete")
     @ApiOperation("删除购物车的某个商品")   //增加这个Swagger注解，即可生成swagger API文档
     public ApiRestResponse delete(@RequestParam("productId") Integer productId){
         //s0,内部获取用户ID，防止横向越权（已经在UserFilter中实现拦截）
         //s1,传入userId和productId，进入service层
-        //不能传入userId和cartId，否则可以删除别人的购物车
+        //params中，不能传入userId和cartId，否则可以删除别人的购物车（黑客推测等手法）
         List<CartVO> cartVOList = cartService.delete(UserFilter.currentUser.getId(),productId);
         //返回的是“购物车列表”
         return ApiRestResponse.success(cartVOList);
@@ -114,7 +114,7 @@ public class CartController {
         //s1,传入userId、productId和selected，进入service层
         List<CartVO> cartVOList = cartService.selectOrNot(UserFilter.currentUser.getId(),productId,selected);
 
-        //s6，返回的是“购物车列表”
+        //s5，返回的是“购物车列表”
         return ApiRestResponse.success(cartVOList);
     }
 

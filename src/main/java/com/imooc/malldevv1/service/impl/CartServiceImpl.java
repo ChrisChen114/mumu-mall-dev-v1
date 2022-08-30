@@ -154,6 +154,7 @@ public class CartServiceImpl implements CartService {
             cartNew.setUserId(cart.getUserId());
             cartNew.setProductId(cart.getProductId());//也可以不设置
             cartNew.setSelected(Constant.Cart.CHECKED);//可设置可不设置。不同的电商平台理解都不一样
+            //疑问：上面的代码能不能像mapper.xml中selectOrNot一样，在sql中更新？？
             //选择性更新购物车
             int countCart = cartMapper.updateByPrimaryKeySelective(cartNew);
             if (countCart == 0) {
@@ -197,14 +198,14 @@ public class CartServiceImpl implements CartService {
     //2022-08-28 编写
     @Override
     public List<CartVO> selectOrNot(Integer userId, Integer productId, Integer selected) {
-        //s3,根据userId和productId，查询到该商品；
+        //s2,根据userId和productId，查询到该商品；
         Cart cart = cartMapper.selectByUserIdAndProductId(userId, productId);
-        //s4,判断这个商品在不在购物车
+        //s3,判断这个商品在不在购物车
         if (cart == null) {
-            //s4-1，这个商品之前不在购物车里，无法选择
+            //s3-1，这个商品之前不在购物车里，无法选择
             throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
         } else {
-            //s4-2，在购物车里，则可以选中/不选中
+            //s3-2，在购物车里，则可以选中/不选中
             //方案一：new一个cart，然后设置selected，最后调用updateByPrimaryKeySelective方法
             //目前不确定有没有潜在风险
 //            Cart cartNew = new Cart();
@@ -219,15 +220,15 @@ public class CartServiceImpl implements CartService {
 //                throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
 //            }
 
-            //方案二：在mapper.xml中进行更新，此种方法配合“全选/全不选购物车的某个商品”功能，效率更高.
-            //s4-2，在购物车里，则可以选中/不选中
+            //方案二：在mapper.xml中进行更新，此种方法同时可以配合“全选/全不选购物车的某个商品”功能，效率更高.
+            //s3-2，在购物车里，则可以选中/不选中
             int countCart = cartMapper.selectOrNot(userId, productId, selected);
             if (countCart == 0) {
                 throw new ImoocMallException(ImoocMallExceptionEnum.UPDATE_FAILED);
             }
         }
 
-        //s5，调用list方法，返回的是“购物车列表”
+        //s4，调用list方法，返回的是“购物车列表”
         return this.list(userId);
 
     }

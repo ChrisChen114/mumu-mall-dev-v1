@@ -192,6 +192,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.imooc.malldevv1.model.pojo.Order">
     update imooc_mall_dev_v1_order
     set order_no = #{orderNo,jdbcType=VARCHAR},
@@ -210,4 +211,14 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!-- 前台创建订单
+       2022-08-29 创建
+  -->
+  <select id="selectCheckedItem" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    from imooc_mall_dev_v1_order
+    where user_id = #{userId,jdbcType = INTEGER}
+  </select>
+
 </mapper>
