@@ -2,7 +2,7 @@ package com.imooc.malldevv1.model.vo;
 
 /**
  * OrderItemVO  是经过一定的转换之后，将订单列表信息返回给前端内容的类，给前端展示用
- * 作为属性，在OrderVO中使用
+ * 作为一个属性，在OrderVO中使用
  * VO:视图对象，一般用于返回到前端的数据.
  * vo是经过一定的转换之后，返回给前端内容的类
  * 暂时未在OrderVO类后面添加implements Serializable？？
@@ -11,6 +11,8 @@ package com.imooc.malldevv1.model.vo;
 public class OrderItemVO {
 
     private String orderNo;
+
+    private Integer productId;//首次创建OrderItemVO，被遗漏
 
     private String productName;
 
@@ -72,4 +74,11 @@ public class OrderItemVO {
         this.totalPrice = totalPrice;
     }
 
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
 }

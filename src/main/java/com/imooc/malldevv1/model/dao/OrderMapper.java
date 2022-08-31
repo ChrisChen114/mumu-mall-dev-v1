@@ -30,7 +30,9 @@ public interface OrderMapper {
 
     //前台订单详情
     //2022-08-30
-    Order selectByOrderNoInOrder(@Param("orderNo") String orderNo);
+    Order selectByOrderNo(@Param("orderNo") String orderNo);
+
+    List<Order> selectForCustomerByUserId(@Param("userId") Integer userId);
 
 
 }

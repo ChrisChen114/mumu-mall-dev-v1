@@ -26,7 +26,7 @@ public interface OrderItemMapper {
     //dev_v1 增加
     //前台订单详情
     //2022-08-30 创建
-    List<OrderItem> selectByOrderNoinOrder_Item(@Param("orderNo") String orderNo);
+    List<OrderItem> selectByOrderNo(@Param("orderNo") String orderNo);
 
 
 

@@ -225,13 +225,29 @@
   <!-- 前台订单详情
      2022-08-30 创建
      <include refid="Base_Column_List"></include>忘记使用
+     <include refid="Base_Column_List" />表示一个对象，即select这样一个对象
 -->
-    <select id="selectByOrderNoInOrder" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List"></include>
       from imooc_mall_dev_v1_order
       where order_no = #{orderNo,jdbcType = VARCHAR}
     </select>
+
+  <!-- 前台订单详情
+   2022-08-30 创建
+   <include refid="Base_Column_List"></include>忘记使用
+   <include refid="Base_Column_List" />表示一个对象，即select这样一个对象
+   排序规则未写：order by create_time desc
+-->
+  <select id="selectForCustomerByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from imooc_mall_dev_v1_order
+    where user_id = #{userId,jdbcType = INTEGER}
+    order by create_time desc
+  </select>
+
 
 
 </mapper>

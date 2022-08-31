@@ -1,5 +1,6 @@
 package com.imooc.malldevv1.service;
 
+import com.github.pagehelper.PageInfo;
 import com.imooc.malldevv1.model.request.CreateOrderReq;
 import com.imooc.malldevv1.model.vo.OrderVO;
 
@@ -18,4 +19,15 @@ public interface OrderService {
     //2022-08-30 创建
     //返回值是OrderVO
     OrderVO detail(String orderNo);
+
+    PageInfo listForCustomer(Integer pageNum, Integer pageSize);
+
+
+    //前台取消订单
+    //2022-08-31 创建
+    void cancel(String orderNo);
+
+    //前台取消订单
+    //2022-08-31 创建
+    String qrcode(String orderNo);
 }

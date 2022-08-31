@@ -82,7 +82,7 @@ public class Constant {
     //2022-08-29 创建
     public enum OrderStatusEnum{
         CANCELED(0,"用户已取消"),
-        NOT_PAID(10,"未付款"),
+        NOT_PAID(10,"未付款（下单后的初始状态）"),
         PAID(20,"已付款"),
         DELIVERED(30,"已发货"),
         FINISHED(40,"交易完成");

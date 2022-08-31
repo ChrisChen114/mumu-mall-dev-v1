@@ -13,6 +13,8 @@ import java.util.List;
  * 2022-08-29 创建
  */
 public class OrderVO {
+    //不能返回id，会暴露商城的业务量
+
     private String orderNo;
 
     private Integer userId;
@@ -39,9 +41,10 @@ public class OrderVO {
 
     private Date createTime;
 
-    List<OrderItemVO> orderItemVOList;
+    //定制OrderItemVO
+    List<OrderItemVO> orderItemVOList;//订单里的每个商品List
 
-    private String orderStatusName;
+    private String orderStatusName;//订单状态
 
     public String getOrderNo() {
         return orderNo;

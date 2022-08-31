@@ -154,10 +154,10 @@
 
   <!-- 前台订单详情
    2022-08-30 创建
-   resultMap
+   resultMap使用BaseResultMap，不用pojo下的OrderItem
    <include refid="Base_Column_List"></include>忘记使用
 -->
-  <select id="selectByOrderNoinOrder_Item" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
         <include refid="Base_Column_List"></include>
     from imooc_mall_dev_v1_order_item
