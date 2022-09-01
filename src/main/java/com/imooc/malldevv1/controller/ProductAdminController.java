@@ -112,12 +112,13 @@ public class ProductAdminController {
         }
 
         //s6，把地址给返回前端
-        //返回："data": "http://127.0.0.1:8082/upload/b899f512-3467-4c71-8d2d-2d491b21f429.png"
+        //返回："data": "http://127.0.0.1:8083/upload/b899f512-3467-4c71-8d2d-2d491b21f429.png"
         try {
             //路径中包括ip和端口号
             //注意：是getRequestURL(),不是.getRequestURI()，之前写错了
             //加""，是因为httpServletRequest.getRequestURL()对象为StringBuffer，而需要的是String，因此加""
-            return ApiRestResponse.success(getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/images/" + newFileName);
+            //getRequestURI还是getRequestURL
+            return ApiRestResponse.success(getHost(new URI(httpServletRequest.getRequestURI() + "")) + "/images/" + newFileName);
         } catch (URISyntaxException e) {
             //s6-2
             return ApiRestResponse.error(ImoocMallExceptionEnum.UPLOAD_FAILED);

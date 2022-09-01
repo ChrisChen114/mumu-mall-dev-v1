@@ -248,6 +248,15 @@
     order by create_time desc
   </select>
 
+  <!-- 后台订单列表
+       2022-08-31 创建
+    -->
+  <select id="selectAllForAdmin" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from imooc_mall_dev_v1_order
+    order by create_time desc
+  </select>
 
 
 </mapper>

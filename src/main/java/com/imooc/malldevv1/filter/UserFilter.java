@@ -50,7 +50,6 @@ public class UserFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request1 = (HttpServletRequest) request;
         HttpSession session = ((HttpServletRequest) request).getSession();
         currentUser = (User)session.getAttribute(Constant.IMOOC_MALL_DEV_V1_USER);
         if (currentUser == null){

@@ -68,4 +68,22 @@ public class ProductListReq {
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
+
+    /**
+     * toString方法
+     * 因为在filter包中WebLogAspect类，doBefore方法的log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));，需要传入String类型内容，调试时候更加方便
+     * 2022-08-31 增加
+     * 来自视频9-1 准备工作
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "ProductListReq{" +
+                "keyword='" + keyword + '\'' +
+                ", categoryId=" + categoryId +
+                ", orderBy='" + orderBy + '\'' +
+                ", pageNum=" + pageNum +
+                ", pageSize=" + pageSize +
+                '}';
+    }
 }

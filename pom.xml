@@ -111,6 +111,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
+
+        <!-- 生成支付二维码
+             对应步骤s1
+             来自视频8-9 二维码接口开发
+             2022-08-31 -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.0</version>
+        </dependency>
     </dependencies>
 
     <build>

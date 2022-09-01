@@ -32,7 +32,12 @@ public interface OrderMapper {
     //2022-08-30
     Order selectByOrderNo(@Param("orderNo") String orderNo);
 
+    //前台订单列表
+    //2022-08-30 创建
     List<Order> selectForCustomerByUserId(@Param("userId") Integer userId);
 
+    //后台订单列表
+    //2022-08-31 创建
+    List<Order> selectAllForAdmin();
 
 }

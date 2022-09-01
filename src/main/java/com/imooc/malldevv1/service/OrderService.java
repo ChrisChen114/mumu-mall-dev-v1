@@ -30,4 +30,22 @@ public interface OrderService {
     //前台取消订单
     //2022-08-31 创建
     String qrcode(String orderNo);
+
+    //前台支付订单
+    //2022-08-31 创建
+    void pay(String orderNo);
+
+    //后台订单列表
+    //2022-08-31 创建
+    //返回值是PageInfo
+    PageInfo listForAdmin(Integer pageNum, Integer pageSize);
+
+    //后台订单列表
+    //2022-08-31 创建
+    //返回值是PageInfo
+    void deliver(String orderNo);
+
+    //前后台通用：订单完结
+    //2022-08-31 创建
+    void finish(String orderNo);
 }

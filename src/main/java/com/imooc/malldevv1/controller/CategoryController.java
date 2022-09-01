@@ -132,7 +132,7 @@ public class CategoryController {
     //从请求中传入pageNum和pageSize
     //技术点：利用PageHelper实现分页，返回时使用PageInfo。
     //pageNum第几页数，pageSize每一页的大小
-    @PostMapping("/admin/category/list")
+    @GetMapping("/admin/category/list")
     @ApiOperation("后台目录列表")
     public ApiRestResponse listCategoryForAdmin(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize){
         //s1, 传入pageNum和pageSize，进入Service层.
