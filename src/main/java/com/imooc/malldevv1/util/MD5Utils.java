@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * MD5加密工具（hash算法）
+ * 来自视频4-8 对密码进行MD5保护
  * 2022-08-19 创建
  * 2022-08-19 编写
  */
@@ -27,7 +28,7 @@ public class MD5Utils {
         //加盐值，使得密码强度更强;将盐值这个常量定义在common包下的Constant类下
         return Base64.encodeBase64String(md5.digest((strValue + Constant.SALT).getBytes()));
 
-        //
+        //自己写的 （：
 //        String encodeStr = DigestUtils.md5Hex(password + salt);
 //        return encodeStr;
     }

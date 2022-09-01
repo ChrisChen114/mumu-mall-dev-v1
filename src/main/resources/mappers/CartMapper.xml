@@ -147,13 +147,15 @@
 
   <!-- 更新购物车某个商品的数量
     2022-08-28编写
+    弃用
     -->
 <!--  <select id="selectByProductId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from imooc_mall_dev_v1_cart
     where product_id = #{productId,jdbcType=INTEGER}
-  </select>-->
+  </select>
+  -->
 
   <!-- 选中/不选中购物车的某个商品 和 全选/全不选购物车的某个商品
   在product_id上设置一个if判断

@@ -1,10 +1,10 @@
 package com.imooc.malldevv1.exception;
 
 /**
- * 异常枚举
+ * 异常枚举类
  * 2022-08-19 创建
  * 2022-08-19 编写
- *
+ * 来自视频4-3
  * 起因：在ApiRestResponse类中，失败的常见错误，不想每次都写，
  *      需要有一个类定义各种常见的错误，枚举是一个不错的方式.
  *
@@ -39,6 +39,7 @@ public enum ImoocMallExceptionEnum {
     //20000打头的，表示系统类型的异常
     SYSTEM_ERROR(20000,"系统异常");
 
+    //两个属性
     //异常码
     Integer code;
     //异常信息

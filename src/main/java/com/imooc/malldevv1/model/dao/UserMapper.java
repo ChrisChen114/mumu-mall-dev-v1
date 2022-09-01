@@ -23,7 +23,7 @@ public interface UserMapper {
 
     //dev_v1 增加
     // 2022-08-19 新增；用户模块中注册新用户用到
-    //在String userName前面，不用加@Param注解
+    //在String userName前面，可以不用加@Param注解；但是加的话，在mapper xml中会有智能提示
     //对于MyBatis而言，入参只有一个的话，可以不写@Param注解
     //而如果有多个，则需要使用@Param注解，注解里面的内容与后面的属性名一致
     User selectByName( String userName);

@@ -4,7 +4,6 @@ import com.imooc.malldevv1.common.ApiRestResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.AliasFor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +16,8 @@ import java.util.List;
 
 
 /**
+ * GlobalExceptionHandler：处理统一异常的handler
+ * 来自视频4-6 统一异常处理
  * 2022-08-19 创建
  * 2022-08-19 编写
  *
@@ -31,12 +32,9 @@ import java.util.List;
  */
 
 
-/**
- * GlobalExceptionHandler：处理统一异常的handler
-
- */
 @ControllerAdvice   //这个注解的作用是用于拦截全局异常的
 public class GlobalExceptionHandler {
+    //使用这两个包下的，org.slf4j.Logger;org.slf4j.LoggerFactory;
     private final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
@@ -47,7 +45,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(Exception.class)
-    @ResponseBody
+    @ResponseBody  //用于返回Json格式的ApiRestResponse
     public Object handleException(Exception e) {
         log.error("Default Exception: ", e);
         //返回的是Json格式的ApiRestResponse，需要增加@ResponseBody注解.
@@ -62,7 +60,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(ImoocMallException.class)
-    @ResponseBody
+    @ResponseBody    //用于返回Json格式的ApiRestResponse
     public Object handleImoocMallException(ImoocMallException e) {
         log.error("ImoocMall Exception: ", e);
         return ApiRestResponse.error(e.getCode(), e.getMessage());
@@ -71,6 +69,7 @@ public class GlobalExceptionHandler {
 
     /**
      * 设置全局入参异常捕获，主要解决校验参数异常
+     * 视频5-5 @Valid注解优雅校验入参
      * 2022-08-21 增加
      * MethodArgumentNotValidException是系统自带的异常类,
      *     定义：Exception to be thrown when validation on an argument annotated with {@code @Valid} fails.

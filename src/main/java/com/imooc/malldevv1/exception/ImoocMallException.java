@@ -2,6 +2,7 @@ package com.imooc.malldevv1.exception;
 
 /**
  * 统一异常
+ * 来自视频4-5 自定义异常类
  * 2022-08-19 创建
  * 2022-08-19 编写
  */

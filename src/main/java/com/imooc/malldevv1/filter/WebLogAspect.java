@@ -73,6 +73,7 @@ public class WebLogAspect {
         //CLASS_METHOD : com.imooc.malldevv1.controller.UserController.personalPage
         log.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         //ARGS : []             将数组转为String
+        // request包下的请求类，都需要加上toString方法，方便调试使用. 2022-08-31增加
         log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
     }
 

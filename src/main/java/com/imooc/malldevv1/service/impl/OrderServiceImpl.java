@@ -397,6 +397,7 @@ public class OrderServiceImpl implements OrderService {
         //s3-1,获取到请求属性；RequestContextHolder会存放一些请求信息；port可以从request中得到，
         //RequestContextHolder: 持有上下文的Request容器.
         //ServletRequestAttributes: Accesses objects from servlet request and HTTP session scope
+        //补充：在filter包下WebLogAspect的doBefore方法，用过RequestContextHolder. 2022-08-31增加
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         //s3-2，拿到http请求
         HttpServletRequest request = attributes.getRequest();

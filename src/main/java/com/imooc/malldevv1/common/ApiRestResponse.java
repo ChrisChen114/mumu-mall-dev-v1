@@ -5,7 +5,7 @@ import com.imooc.malldevv1.exception.ImoocMallExceptionEnum;
 /**
  * common通用类：
  * API统一返回对象；通用返回对象
- *
+ * 来自视频4-3 API统一返回对象
  * 2022-08-19 创建
  * 2022-08-20 更新
  *
@@ -20,10 +20,15 @@ public class ApiRestResponse<T> {
     //"msg": "SUCCESS",
     //"data":null
     //}
+
+    //定义3个属性，以与前台返回统一的数据
     private Integer status;
+
     private String msg;
+
     //泛型对象，使用T表示；主要基于各个模块的返回值不同，使用泛型合适。需要在类后面增加"<T>"即可.
     private T data;
+
 
     //定义两个常量，用于默认情况下的消息返回
     private static final int OK_CODE = 10000;
